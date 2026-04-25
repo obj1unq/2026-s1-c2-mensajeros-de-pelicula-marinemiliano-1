@@ -10,7 +10,25 @@ object empresaMensajeria {
     //por parte del usuario no se modifica la variable
     var pagoRealizado = false
 
+    method puedeEntregarPaquete_EnDestino_(_mensajeroDesignado,_destino) {
+      
+      return self.estaEnvioPago() && _destino.puedeDejarPasarA_(_mensajeroDesignado)
+    }
 
+
+    /* destino.entregarPaquetePor_(_mensajeroDesignado)
+        _mensajeroDesignado.entregarPaquete(_destino)
+      } */
+    
+    method recibirPago() {pagoRealizado = true}
+
+    method estaEnvioPago() {return pagoRealizado}
+
+    }
+
+
+//como esta en el apunte
+/* 
 
     method validarEntrega(_destino,_mensajeroDesignado) {
 
@@ -28,11 +46,8 @@ object empresaMensajeria {
     method recibirPago() {pagoRealizado = true}
 
     method estaPago() {return pagoRealizado}
-}
 
 
-//como esta en el apunte
-/* 
     para copiarlo igual al ejercicio de la pagina 21
     los asignaria en los test
     //luego se designa a un mensajero entre tres

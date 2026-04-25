@@ -4,68 +4,104 @@ import vehiculo.*
 import personas.*
 
 
-//ACLARACION: 
-
-//DECIDI VALIDAR LOS ELEMENTOS POR SEPARADO O SEA UTILIZANDO DOS METODOS: validarPago y validarEntrega 
-//NO SE SI ESTA BIEN PERO FUNCIONA Y EL CODIGO ES MAS LIMPIO, 
-
-//COMO TENGO UNA EXCEPCION DENTRO DE OTRA (EN OBJETOS empresaMensajeria y destinos) INTENTÉ RESOLVERLO
-//COMO SE PLANTEABA EN EL APUNTE DE EXCEPCIONES PAGINA 21 "objeto milena", PERO NO LOGRÉ RESOLVERLO O NO SÉ SI APLICA A LO QUE SE PIDE AQUI
-
-//AUN ASI LO DEJÉ COMENTADO EN EL MODULO "empresaMensajeria" HACIA EL FINAL DEL MISMO. 
-
-//EN LA PARTE MAS ABAJO DE ESTE MÓDULO ES QUE DEJÉ COMENTADOS LOS TEST QUE HICE CON ESTOS METODOS, AL APLICAR LOS TEST, ESTOS PRESENTABAN MUCHAS INCONSISTENCIAS, COSAS QUE TENÍAN QUE DAR MAL DABAN BIEN Y VICEVERSA.
-
-
-
 describe "CASOS DE PRUEBA" {
-  
-  test "el paquete de george no esta pago y no puede ser llevado por
-         neo a la matrix" 
-  {
+  test "GEORGE NO PAGO NO PUEDE SER LLEVADO POR NEO A LA MATRIX,
+        INDEPENDIENTEMENTE DE SI CARGO O NO SALDO" {
     
-    neo.estadoCredito(false)   //asigno el estado de credito de neo
-    assert.throwsException({empresaMensajeria.validarPago()})
-    assert.throwsException({ empresaMensajeria.validarEntrega(matrix,neo)})  
+    neo.estadoCredito(false) //inicializo su estado de credito
+    assert.notThat(empresaMensajeria.puedeEntregarPaquete_EnDestino_(neo,matrix))
+
   }
 
-  test "El paquete de George que sí está pago puede ser llevado por Jean a la matrix" {
+  test "GEORGE NO PAGO NO PUEDE SER LLEVADO POR NEO A LA MATRIX" {
+    
+    neo.estadoCredito(true)  //inicializo su estado de credito
+    assert.notThat(empresaMensajeria.puedeEntregarPaquete_EnDestino_(neo,matrix))
+  }
+
+  test "EL PAQUETE DE GEORGE QUE SI ESTA PAGO PUEDE SER LLEVADO POR JEAN A LA
+        MATRIX" {
     
     george.pagarEnvio()
-
-     empresaMensajeria.validarEntrega(matrix,jean)  
-
-    //ENTIENDO QUE PARA CUESTIONES EN DONDE TIENE QUE RETORNAR TRUE SE USA ASI? ES LA UNICA MANERA QUE ENCONTRÉ.
-     
-     //SINO USAR EL EXCEPTION Y COLOCAR EL MENSAJE "empresaMensajeria.validarEntrega(matrix,jean)" Y QUE SALGA EN AMARILLO Y AHI SE SUPONE QUE ESTA CORRECTO, QUE EL TEST PASA CORRECTAMENTE SIN ERRORES.
-
-     //INTENTÉ USAR EL THAT PERO AL TENER MENSAJES CON EXCEPCIONES ME TIRABA ERROR, EN EL ULTIMO CASO DE PRUEBA SE ME
-     //PRESENTA EL MISMO INCONVENIENTE 
+    assert.that(empresaMensajeria.puedeEntregarPaquete_EnDestino_(jean,matrix))
   }
-
-
-  test "El paquete de George que sí está pago no puede ser llevado por Sara (que pesa 70kg) a Brooklyn si es que utiliza un camión con un acoplado ." {
-
+  
+  test "EL PAQUETE DE GEORGE QUE SI ESTA PAGO NO PUEDE SER LLEVADO POR SARA A BROOKLYN SI ES QUE  ESTA UTILIZA UN CAMION CON UN ACOPLADO Y ELLA PESA 70 KILOS" {
+    
     george.pagarEnvio()
     sara.pesoSara(70)
-    sara.vehiculo(camion)
-    sara.vehiculo().acoplados(1) ////el vehiculo (camion) elegido por zara tiene 1 acoplado
-    
-    assert.throwsException({empresaMensajeria.validarEntrega(brooklyn,sara)})
+    sara.viajaEn(camion)
+    sara.vehiculo().acoplados(1)
+    assert.notThat(empresaMensajeria.puedeEntregarPaquete_EnDestino_(sara,brooklyn))
   }
 
-  
-  test "La entrega anterior se puede hacer si sara usa una moto " {
-
+  test "LA ENTREGA ANTERIOR SE PUEDE HACER SI SARA USA MOTO" {
+    
     george.pagarEnvio()
     sara.pesoSara(70)
-    sara.vehiculo(moto)
-
-    empresaMensajeria.validarEntrega(brooklyn,sara)
-    
-  }  
-
+    sara.viajaEn(moto)
+    assert.that(empresaMensajeria.puedeEntregarPaquete_EnDestino_(sara,brooklyn))
+  }
 }
+
+
+
+
+
+
+
+// describe "CASOS DE PRUEBA" {
+  
+//   test "el paquete de george no esta pago y no puede ser llevado por
+//          neo a la matrix" 
+//   {
+    
+//     neo.estadoCredito(false)   //asigno el estado de credito de neo
+    
+//    }
+
+//   test "El paquete de George que sí está pago puede ser llevado por Jean a la matrix" {
+    
+//     george.pagarEnvio()
+
+//      empresaMensajeria.validarEntrega(matrix,jean)  
+
+//     //ENTIENDO QUE PARA CUESTIONES EN DONDE TIENE QUE RETORNAR TRUE SE USA ASI? ES LA UNICA MANERA QUE ENCONTRÉ.
+     
+//      //SINO USAR EL EXCEPTION Y COLOCAR EL MENSAJE "empresaMensajeria.validarEntrega(matrix,jean)" Y QUE SALGA EN AMARILLO Y AHI SE SUPONE QUE ESTA CORRECTO, QUE EL TEST PASA CORRECTAMENTE SIN ERRORES.
+
+//      //INTENTÉ USAR EL THAT PERO AL TENER MENSAJES CON EXCEPCIONES ME TIRABA ERROR, EN EL ULTIMO CASO DE PRUEBA SE ME
+//      //PRESENTA EL MISMO INCONVENIENTE 
+//   }
+
+
+//   test "El paquete de George que sí está pago no puede ser llevado por Sara (que pesa 70kg) a Brooklyn si es que utiliza un camión con un acoplado ." {
+
+//     george.pagarEnvio()
+//     sara.pesoSara(70)
+//     sara.vehiculo(camion)
+//     sara.vehiculo().acoplados(1) ////el vehiculo (camion) elegido por zara tiene 1 acoplado
+    
+//     assert.throwsException({empresaMensajeria.validarEntrega(brooklyn,sara)})
+//   }
+
+  
+//   test "La entrega anterior se puede hacer si sara usa una moto " {
+
+//     george.pagarEnvio()
+//     sara.pesoSara(70)
+//     sara.vehiculo(moto)
+
+//     empresaMensajeria.validarEntrega(brooklyn,sara)
+    
+//   }  
+
+// }
+
+
+
+
+
 
   
 /*

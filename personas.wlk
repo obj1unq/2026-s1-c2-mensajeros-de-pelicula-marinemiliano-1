@@ -26,13 +26,12 @@ object neo {
 
 }
 
-
 object sara {
   
   var property pesoSara = 50
   var property vehiculo = null
 
-  method pesoTotal() {return vehiculo.peso() + self.pesoSara()}
+  method peso() {return vehiculo.peso() + self.pesoSara()}
 
   method viajaEn(_nuevoVehiculo) {vehiculo = _nuevoVehiculo}
 
