@@ -1,0 +1,166 @@
+import destinos.*
+import empresaMensajeria.*
+import vehiculo.*
+import personas.*
+
+
+describe "CASOS DE PRUEBA" {
+  test "GEORGE NO PAGO NO PUEDE SER LLEVADO POR NEO A LA MATRIX,
+        INDEPENDIENTEMENTE DE SI CARGO O NO SALDO" {
+    
+    neo.estadoCredito(false) //inicializo su estado de credito
+    assert.notThat(empresaMensajeria.puedeEntregarPaquete_EnDestino_(neo,matrix))
+
+  }
+
+  test "GEORGE NO PAGO NO PUEDE SER LLEVADO POR NEO A LA MATRIX" {
+    
+    neo.estadoCredito(true)  //inicializo su estado de credito
+    assert.notThat(empresaMensajeria.puedeEntregarPaquete_EnDestino_(neo,matrix))
+  }
+
+  test "EL PAQUETE DE GEORGE QUE SI ESTA PAGO PUEDE SER LLEVADO POR JEAN A LA
+        MATRIX" {
+    
+    george.pagarEnvio()
+    assert.that(empresaMensajeria.puedeEntregarPaquete_EnDestino_(jean,matrix))
+  }
+  
+  test "EL PAQUETE DE GEORGE QUE SI ESTA PAGO NO PUEDE SER LLEVADO POR SARA A BROOKLYN SI ES QUE  ESTA UTILIZA UN CAMION CON UN ACOPLADO Y ELLA PESA 70 KILOS" {
+    
+    george.pagarEnvio()
+    sara.pesoSara(70)
+    sara.viajaEn(camion)
+    sara.vehiculo().acoplados(1)
+    assert.notThat(empresaMensajeria.puedeEntregarPaquete_EnDestino_(sara,brooklyn))
+  }
+
+  test "LA ENTREGA ANTERIOR SE PUEDE HACER SI SARA USA MOTO" {
+    
+    george.pagarEnvio()
+    sara.pesoSara(70)
+    sara.viajaEn(moto)
+    assert.that(empresaMensajeria.puedeEntregarPaquete_EnDestino_(sara,brooklyn))
+  }
+}
+
+
+
+
+
+
+
+// describe "CASOS DE PRUEBA" {
+  
+//   test "el paquete de george no esta pago y no puede ser llevado por
+//          neo a la matrix" 
+//   {
+    
+//     neo.estadoCredito(false)   //asigno el estado de credito de neo
+    
+//    }
+
+//   test "El paquete de George que sí está pago puede ser llevado por Jean a la matrix" {
+    
+//     george.pagarEnvio()
+
+//      empresaMensajeria.validarEntrega(matrix,jean)  
+
+//     //ENTIENDO QUE PARA CUESTIONES EN DONDE TIENE QUE RETORNAR TRUE SE USA ASI? ES LA UNICA MANERA QUE ENCONTRÉ.
+     
+//      //SINO USAR EL EXCEPTION Y COLOCAR EL MENSAJE "empresaMensajeria.validarEntrega(matrix,jean)" Y QUE SALGA EN AMARILLO Y AHI SE SUPONE QUE ESTA CORRECTO, QUE EL TEST PASA CORRECTAMENTE SIN ERRORES.
+
+//      //INTENTÉ USAR EL THAT PERO AL TENER MENSAJES CON EXCEPCIONES ME TIRABA ERROR, EN EL ULTIMO CASO DE PRUEBA SE ME
+//      //PRESENTA EL MISMO INCONVENIENTE 
+//   }
+
+
+//   test "El paquete de George que sí está pago no puede ser llevado por Sara (que pesa 70kg) a Brooklyn si es que utiliza un camión con un acoplado ." {
+
+//     george.pagarEnvio()
+//     sara.pesoSara(70)
+//     sara.vehiculo(camion)
+//     sara.vehiculo().acoplados(1) ////el vehiculo (camion) elegido por zara tiene 1 acoplado
+    
+//     assert.throwsException({empresaMensajeria.validarEntrega(brooklyn,sara)})
+//   }
+
+  
+//   test "La entrega anterior se puede hacer si sara usa una moto " {
+
+//     george.pagarEnvio()
+//     sara.pesoSara(70)
+//     sara.vehiculo(moto)
+
+//     empresaMensajeria.validarEntrega(brooklyn,sara)
+    
+//   }  
+
+// }
+
+
+
+
+
+
+  
+/*
+  test "el paquete de George que si esta pago puede ser llevado por jean a
+        a la matrix" 
+  {
+    george.pagarEnvio()
+    assert.throwsException({empresaMensajeria.puedeEntregar(gray,matrix)})  
+  }
+ 
+  La entrega anterior puede hacerse si Sara usa una moto 
+ 
+  test "El paquete de George que sí está pago no puede ser llevado por Sara (que pesa 70kg) a Brooklyn si es que utiliza un camión con un acoplado" 
+  {
+    george.pagarEnvio()
+    sara.peso(70)
+    sara.vehiculo(camion)
+    sara.vehiculo().cantAcoplados(1)
+    assert.throwsException({empresaMensajeria.puedeEntregar(sara,brooklyn)})  
+  }
+
+  test "la entrega anterior puede hacerse si sara usa una moto" {
+    
+  }
+
+
+  
+  //SEGUNDO PUNTO SEGUNDA PARTE
+
+
+  */
+  
+
+
+
+
+
+
+
+/*
+   test "configuro a neo para que no pueda llamar a la matrix" {
+
+    empresaMensajeria.mensajeroDesignado(neo)
+    neo.estadoCredito(false)   
+    empresaMensajeria.destino(matrix)  
+    assert.throwsException({empresaMensajeria.puedeEntregar()})  
+  }
+
+
+  //DECIDI SEPARAR EL TEST UNO PORQUE SINO GENERABA INCONSISTENCIAS
+
+
+  test "configuro a neo para que no pueda llamar a la matrix" {
+
+    empresaMensajeria.mensajeroDesignado(neo)
+   
+    neo.estadoCredito(false)   
+    empresaMensajeria.destino(matrix)  
+    assert.throwsException({empresaMensajeria.validarEntrega()})  
+  }
+  
+ */
